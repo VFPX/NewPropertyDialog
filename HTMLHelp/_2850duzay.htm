@@ -1,0 +1,75 @@
+
+<html>
+<head>
+<topictype value="TOPIC"/>
+<title>SFPropertyEditorToggle</title>
+<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+<SCRIPT SRC="templates/wwhelp.js"></SCRIPT>
+</head>
+<body leftmargin=0 topmargin=0>
+
+<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
+<tr><td valign="center">
+<span class="projectname">New Property/Method Dialog Replacement</span>
+</td></tr><tr><td>
+<span class="topicname">SFPropertyEditorToggle
+</span>
+</td></tr>
+</table>
+
+<div class="contentpane">
+<br>Let's look at a practical example: toggling property values. Not only is such an editor great for quickly changing the values of logical properties, it's also useful for numeric properties so they'd work just like double-clicking native properties with a pre-defined range of values such as BorderStyle. The class that provides this is SFPropertyEditorToggle.<p>The PropertyEditor method checks to see if custom lowvalue and highvalue Member Data attributes exist, and if so, that both of them exist and they have reasonable values (feel free to change this range check if you wish). It then toggles the property by calling UpdateProperty with the appropriate value: NOT the current value for a logical property, the current value + 1 for a numeric property that hasn't reached the maximum value yet, or the minimum value if the property is at the maximum.<p><pre>local lnValue, ;
+  lnLowValue, ;
+  lcLowValueType, ;
+  lnHighValue, ;
+  lcHighValueType
+with This
+
+* Ensure that if either lowvalue or highvalue
+* attributes exist that they both exist and that
+* they're reasonable values.
+
+  if .oAttributes.GetKey('lowvalue') &gt; 0
+    lnValue    = .oAttributes.Item('lowvalue')
+    lnLowValue = int(val(lnValue))
+  endif .oAttributes.GetKey('lowvalue') &gt; 0
+  lcLowValueType = vartype(lnLowValue)
+  if .oAttributes.GetKey('highvalue') &gt; 0
+    lnValue    = .oAttributes.Item('highvalue')
+    lnHighValue = int(val(lnValue))
+  endif .oAttributes.GetKey('highvalue') &gt; 0
+  lcHighValueType = vartype(lnHighValue)
+  .Assert(lcLowValueType = lcHighValueType, ;
+    '_MemberData must specify both lowvalue and ' + ;
+    'highvalue attributes.')
+  .Assert(lcLowValueType = 'L' or ;
+    (lcLowValueType = 'N' and ;
+    between(lnLowValue, 0, 10)), ;
+    'The _MemberData lowvalue attribute must be ' + ;
+    '0 - 10.')
+  .Assert(lcHighValueType = 'L' or ;
+    (lcHighValueType = 'N' and ;
+    between(lnHighValue, 0, 10)), ;
+    'The _MemberData highvalue attribute must ' + ;
+    'be 0 - 10.')
+
+* Toggle the property value.
+
+  do case
+    case .cDataType = 'L'
+      .UpdateProperty(not .uCurrentValue)
+    case lcHighValueType = 'N' and ;
+      .uCurrentValue &gt;= lnHighValue
+      .UpdateProperty(lnLowValue)
+    otherwise
+      .UpdateProperty(.uCurrentValue + 1)
+  endcase
+endwith</pre><p>To see this editor in action, open the Test class in Test.VCX and double-click the lTest or nTest properties. The Member Data for both properties specifies Toggle as the editor name passed to PropertyEditor.PRG, and Toggle is registered in PropertyEditors.DBF as the SFPropertyEditorToggle class. Also, nTest has lowvalue and highvalue attributes that specify the range of values for nTest as 1 to 3. Double-click nTest several times to see the complete range of values.
+<br>
+
+<p>
+</div>
+<hr>
+<small>Last Updated: <i>11/12/2007</i></small>
+</body>
+</html>

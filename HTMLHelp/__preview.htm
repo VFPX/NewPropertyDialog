@@ -1,0 +1,29 @@
+
+<html>
+<head>
+<topictype value="TOPIC"/>
+<title>Other Property Editor Thoughts</title>
+<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+<SCRIPT SRC="templates/wwhelp.js"></SCRIPT>
+</head>
+<body leftmargin=0 topmargin=0>
+
+<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
+<tr><td valign="center">
+<span class="projectname">New Property/Method Dialog Replacement</span>
+</td></tr><tr><td>
+<span class="topicname">Other Property Editor Thoughts
+</span>
+</td></tr>
+</table>
+
+<div class="contentpane">
+<br>Another generic property editor, SFPropertyEditorGetFile, is used for properties that contain file names. Create custom attributes called fileext and extdescrip that contain the extension for the file and the description for the extension (for example, "DBF" and "Table") and specify "GetFile" as the editor name passed to PropertyEditor.PRG and the name of the property as the second parameter. We won't look at the code for this editor since it's relatively simple. See the Member Data for the cFileName property in the Test class for an example of how to use it.<p>Not all property editors you create have to be generic like SFPropertyEditorToggle, SFPropertyEditorEnumerated, and SFPropertyEditorGetFile; your property editors can be specific for a single property. In that case, set the value of cProperty to the name of the property and don't pass a second parameter to PropertyEditor.PRG. Also, a property editor doesn't just have to affect a single property; if the value of one property has an impact on another property, feel free to change both of them at the same time.<p>Because properties in the Properties window have a limit of 8K characters, and _MemberData can grow quite large quickly when you have a lot of members due to the verbosity of XML, you might want to conserve space in the XML by renaming PropertyEditor.PRG to PE.PRG, putting it in a directory in your VFP path, and referencing a specified editor by ID rather than name. For example, you could use script="PE(1,'PropertyName')" to use SFPropertyEditorToggle, which has an ID of 1, as the editor for the property.
+<br>
+
+<p>
+</div>
+<hr>
+<small>Last Updated: <i>11/12/2007</i></small>
+</body>
+</html>

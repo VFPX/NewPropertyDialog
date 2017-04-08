@@ -1,0 +1,129 @@
+
+<html>
+<head>
+<topictype value="TOPIC"/>
+<title>SFPropertyEditor</title>
+<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+<SCRIPT SRC="templates/wwhelp.js"></SCRIPT>
+</head>
+<body leftmargin=0 topmargin=0>
+
+<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
+<tr><td valign="center">
+<span class="projectname">New Property/Method Dialog Replacement</span>
+</td></tr><tr><td>
+<span class="topicname">SFPropertyEditor
+</span>
+</td></tr>
+</table>
+
+<div class="contentpane">
+<br>SFPropertyEditor, defined in a VCX of the same name, is the base class for property editors. SFPropertyEditor shouldn't be used directly; subclass it to create the desired editor. Since PropertyEditor.PRG calls the EditProperty method of the editor, let's start there.<p>The first task is to get a reference to the object or objects selected in the Form or Class Designer. The GetObjectReference method fills and returns a collection with the references, so EditProperty puts the collection into the oObjects property. Next, EditProperty calls ValidateProperty to ensure that a property name was specified in the cProperty property and that the specified property is a member of the selected object. (PropertyEditor.PRG puts the second parameter it's passed into cProperty; for single property editors, fill in a value in the Properties window for the editor subclass.) GetCurrentValue returns the current value of the property (so the editor can display it if necessary) for the first selected object into the uCurrentValue property and cDataType contains the data type of that value. EditProperty then calls GetAttributes to read the Member Data attribute names and their values into the oAttributes collection so the editor can use them if necessary. If your editor needs to test that things are set up properly (for example, that cDataType contains the proper data type the editor is expecting), put that code into the TestCustomAsserts method that EditProperty calls; that method is abstract in this class. Finally, the PropertyEditor method, which is also abstract in this class, is called to perform the actual editing tasks.<p><pre>local loException as Exception
+with This
+  try
+
+* Get a reference to the selected objects.
+
+    .oObjects = .GetObjectReference()
+
+* Ensure we have a valid property name and get its
+* current value and any attributes in _MemberData.
+
+    .ValidateProperty()
+    .uCurrentValue = .GetCurrentValue()
+    .cDataType     = vartype(.uCurrentValue)
+    .oAttributes   = .GetAttributes()
+
+* Test any other asserts, then call the "real" editor
+* method.
+
+    .TestCustomAsserts()
+    .PropertyEditor()
+
+* Handle a failed assert.
+
+  catch to loException ;
+    when not empty(loException.UserValue)
+    .Warning(loException.UserValue)
+
+* Handle any other type of error.
+
+  catch to loException
+    .Warning(loException.Message)
+  endtry
+endwith</pre><p>We won't look at all of the other methods in SFPropertyEditor, just those that contain important or interesting code.<p>GetObjectReference returns a collection of selected objects. It uses ASELOBJ() to fill an array of these objects and copies the references into a collection that it returns. Note the call to the Assert method; this method simply tests the specified condition and if it's false, THROWs the specified error message. Assert is similar to the ASSERT command but allows us to consolidate all assertion failure into one place: the first CATCH statement in EditProperty.<p><pre>local laObjects[1], ;
+  loObjects, ;
+  lnI
+This.Assert(aselobj(laObjects) &gt; 0 or ;
+  aselobj(laObjects, 1) &gt; 0, ;
+  'No object is selected.')
+loObjects = createobject('Collection')
+for lnI = 1 to alen(laObjects)
+  loObjects.Add(laObjects[lnI])
+next lnI
+return loObjects</pre><p>GetAttributes fills a collection with the names and values of all Member Data attributes defined for the property the editor is editing. It uses an XML DOMDocument object to make short work of the searching and parsing. Note that if the object doesn't have a _MemberData property or it's empty, it obviously must have "global" Member Data, which is stored in the IntelliSense table, or else the property editor wouldn't have been launched. So, the Member Data is read from the TIP memo field of the appropriate record in the IntelliSense table in that case.<p><pre>local loAttributes, ;
+  lnSelect, ;
+  loDOM as MSXML2.DOMDocument, ;
+  loObject, ;
+  loNode as MSXML2.IXMLDOMElement, ;
+  loAttribute as MSXML2.IXMLDOMAttribute, ;
+  lcName, ;
+  lcValue
+loAttributes = createobject('Collection')
+try
+
+* Create an XML DOM object and load the XML in the
+* _MemberData property of the first selected object.
+* If that property doesn't exist or is empty, see if
+* there's any global Member Data for it in the
+* IntelliSense table.
+
+  loDOM = createobject('MSXML2.DOMDocument.4.0')
+  loDOM.async = .F.
+  loObject = This.oObjects.Item(1)
+  if pemstatus(loObject, '_MemberData', 5) and ;
+    not empty(loObject._MemberData)
+    loDOM.loadXML(loObject._MemberData)
+  else
+    select 0
+    use (_foxcode) again shared alias __FOXCODE
+    locate for TYPE = 'E' and ;
+      upper(ABBREV) = upper(This.cProperty)
+    if found()
+      loDOM.loadXML(TIP)
+    endif found()
+    use
+  endif pemstatus(loObject, '_MemberData', 5) ...
+
+* Find the node for the property we're editing. If
+* there is one, load all of the attributes into the
+* collection.
+
+  loNode = loDOM.selectSingleNode('//memberdata' + ;
+    '[@name="' + lower(This.cProperty) + '"]')
+  if vartype(loNode) = 'O'
+    for each loAttribute in loNode.attributes
+      lcName  = loAttribute.name
+      lcValue = loAttribute.value
+      loAttributes.Add(lcValue, lcName)
+    next loAttribute
+  endif vartype(loNode) = 'O'
+catch
+  use in select('__FOXCODE')
+endtry
+select (lnSelect)
+return loAttributes</pre><p>UpdateProperty isn't called from EditProperty but can be called from PropertyEditor in your subclass to write the new value to the property in each of the selected objects.<p><pre>lparameters tuValue
+local loObject, ;
+  lcProperty
+for each loObject in This.oObjects
+  lcProperty = 'loObject.' + This.cProperty
+  store tuValue to (lcProperty)
+next loObject</pre>
+<br>
+
+<p>
+</div>
+<hr>
+<small>Last Updated: <i>11/12/2007</i></small>
+</body>
+</html>

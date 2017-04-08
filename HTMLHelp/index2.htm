@@ -1,0 +1,144 @@
+<html>
+<head>
+<base target="wwhelp_right">
+<title>New Property/Method Dialog Replacement</title>
+<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+<script>
+// *** Set this value for a Home Link
+//var HomeLink = "http://www.west-wind.com/wwhelp/";
+var HomeLink = "/";
+
+var AllowSearch = false;
+
+function AlwaysExpand(lcID) {
+   var loNode = document.getElementById(lcID);
+   if (loNode==null)
+    return;
+    
+   loNode.style.display="";
+   
+   loNode = document.getElementById("IMG" + lcID);
+   if (loNode != null)
+      loNode.src = "bmp/minus.gif";
+}
+function Expand(lcID) {
+   var loNode = document.getElementById(lcID);
+   if (loNode != null) {
+      if (loNode.style.display=="none")
+         loNode.style.display="";
+      else
+         loNode.style.display="none";
+   }
+
+   loNode = document.getElementById("IMG" + lcID);
+   if (loNode != null) {
+      if (loNode.src.indexOf("plus.gif") > -1)
+         loNode.src = "bmp/minus.gif";
+      else
+          loNode.src = "bmp/plus.gif";
+      }
+}
+function ExpandParents(lcId) 
+{
+   var loNode = document.getElementById(lcId);
+   if (loNode == null)
+      return;
+   
+   AlwaysExpand(lcId);
+
+   var loOriginal = loNode
+
+   while( loNode!=null) 
+   {
+      loNode = loNode.parentNode;
+
+      if (loNode == null)
+         break;
+      
+      lcId = loNode.id;
+      
+      if (lcId == null || lcId == "")
+         break;
+
+      if ( lcId.substr(0,1) == "_") 
+         ExpandParents(lcId);
+   }
+   
+   loOriginal.scrollIntoView(true);
+   window.scroll(-200,0);
+}
+function PageLoad() {
+   Expand('INDEXPAGE');
+   
+   // *** Expand all parent topics if an ID was passed
+   var lcQuery = window.location.search;
+   var lnMatch = lcQuery.search("id=");
+   if (lnMatch > -1) 
+   {
+   lcPage = lcQuery.substr(lnMatch + 3);
+   ExpandParents(lcPage);
+   }
+}
+</script>
+<style>
+.plussign 
+{
+cursor:hand;
+marginBottom:3px;
+}
+</style>
+</head>
+<body topmargin="0" leftmargin="0" style="background:white" onload="PageLoad();">
+
+<div  class="toccontents banner ">&nbsp;<b style="font-size:10pt">New Property/Method Dialog Replacement</b>
+<div style='font-size:8pt;margin-top:5px;margin-bottom:5px'>
+<script>
+if (HomeLink)
+{
+	document.write("&nbsp;<a href='" + HomeLink + "' target='_top'>Home</a> |");
+}
+if (AllowSearch && window.location.href.toLowerCase().substr(0,5) == "http:")
+{
+	document.write("&nbsp;<a href='search.aspx?title=New+Property%2FMethod+Dialog+Replacement' target='wwhelp_left'>Search</a> | <a href='keywords.htm' target='wwhelp_left'>Keywords</a>");
+}
+</script>
+</div>
+</div>
+<table width="800" class="tocbody">
+<tr><td><span class="tocbody"><img src="bmp/plus.gif" ID="IMGindexpage" class="plussign" onclick="Expand('indexpage');"> <img src="bmp/index.gif"> <a href="indexpage.htm" onclick="AlwaysExpand('indexpage');">New Property/Method Dialog Replacement Project</a> <br>
+<span id="indexpage" style="display:none">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_1t510nl38.htm" id="_1t510nl38">Benefits of the Replacement Dialog</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_28c0wht0q.htm" id="_28c0wht0q">Localizing the New Property/Method Replacement Dialog</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/plus.gif" ID="IMG_1t5107ulq" class="plussign" onclick="Expand('_1t5107ulq');"> <img src="bmp/header.gif"> <a href="_1t5107ulq.htm" onclick="AlwaysExpand('_1t5107ulq');">How it Works</a> <br>
+<span id="_1t5107ulq" style="display:none">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_1t5108g4r.htm" id="_1t5108g4r">MENUHIT</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_1t510ejoc.htm" id="_1t510ejoc">More About MENUHIT</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_1t510gr9k.htm" id="_1t510gr9k">The Replacement Dialog</a> <br>
+</span>
+</span>
+<img src="bmp/plus.gif" ID="IMG_2630mt5se" class="plussign" onclick="Expand('_2630mt5se');"> <img src="bmp/header.gif"> <a href="_2630mt5se.htm" onclick="AlwaysExpand('_2630mt5se');">Property Editor</a> <br>
+<span id="_2630mt5se" style="display:none">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_2850dn0d2.htm" id="_2850dn0d2">PropertyEditor.PRG</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_2850drte3.htm" id="_2850drte3">SFPropertyEditor</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_2850duzay.htm" id="_2850duzay">SFPropertyEditorToggle</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_2850dyorp.htm" id="_2850dyorp">SFPropertyEditorEnumerated</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="bmp/topic.gif"> <a href="_2850e16ya.htm" id="_2850e16ya">Other Property Editor Thoughts</a> <br>
+</span>
+</span></td></tr></table>
+
+<script>
+// *** Expand all parent topics if an ID was passed
+var lcQuery = window.location.search;
+var lnMatch = lcQuery.search("id=");
+if (lnMatch > -1) 
+{
+   lcPage = lcQuery.substr(lnMatch + 3);
+   ExpandParents(lcPage);
+}
+if (HomeLink)
+{
+}
+</script>
+
+</body>
+</html>

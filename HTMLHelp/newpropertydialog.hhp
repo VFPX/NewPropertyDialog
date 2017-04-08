@@ -1,0 +1,47 @@
+[OPTIONS]
+Compatibility=1.1
+Compiled file=newpropertydialog.chm
+Contents file=newpropertydialog.hhc
+Default topic=indexpage.htm
+Display compile progress=No
+Full-text search=Yes
+Index file=newpropertydialog.hhk
+Language=0x409 English (United States)
+Title=New Property/Method Dialog Replacement
+Default Window=wwHelpWindow
+
+[WINDOWS]
+wwHelpWindow=,"newpropertydialog.hhc","newpropertydialog.hhk","indexpage.htm","indexpage.htm",,,,,0x63520,,0x387e,[0,0,700,480],,,,,,,0
+
+[FILES]
+_2850dn0d2.htm
+_1t510nl38.htm
+_2850drte3.htm
+_2850duzay.htm
+_2630mt5se.htm
+_2850dyorp.htm
+_28c0wht0q.htm
+_1t5107ulq.htm
+_2850e16ya.htm
+_1t5108g4r.htm
+_1t510ejoc.htm
+_1t510gr9k.htm
+
+
+[ALIAS]
+IDH_PROPERTYEDITOR.PRG=_2850dn0d2.htm
+IDH_BENEFITS_OF_THE_REPLACEMENT_DIALOG=_1t510nl38.htm
+IDH_SFPROPERTYEDITOR=_2850drte3.htm
+IDH_SFPROPERTYEDITORTOGGLE=_2850duzay.htm
+IDH_PROPERTY_EDITOR=_2630mt5se.htm
+IDH_SFPROPERTYEDITORENUMERATED=_2850dyorp.htm
+IDH_LOCALIZING_THE_NEW_PROPERTY/METHOD_REPLACEMENT_DIALOG=_28c0wht0q.htm
+IDH_HOW_IT_WORKS=_1t5107ulq.htm
+IDH_OTHER_PROPERTY_EDITOR_THOUGHTS=_2850e16ya.htm
+IDH_MENUHIT=_1t5108g4r.htm
+IDH_MORE_ABOUT_MENUHIT=_1t510ejoc.htm
+IDH_THE_REPLACEMENT_DIALOG=_1t510gr9k.htm
+
+
+[MAP]
+#include c:\development\sednax\newpropertydialog\htmlhelp\newpropertydialog_help.h

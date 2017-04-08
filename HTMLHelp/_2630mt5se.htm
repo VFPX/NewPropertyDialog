@@ -1,0 +1,30 @@
+
+<html>
+<head>
+<topictype value="HEADER"/>
+<title>Property Editor</title>
+<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+<SCRIPT SRC="templates/wwhelp.js"></SCRIPT>
+</head>
+<body leftmargin=0 topmargin=0>
+
+<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
+<tr><td valign="center">
+<span style="font:8pt Verdana;font-style:italic">New Property/Method Dialog Replacement</span>
+</td></tr><tr><td>
+<span style="font:10pt Verdana;font-weight:bold">
+<img src="bmp/HEADER.gif"> Property Editor
+</span>
+</td></tr>
+</table>
+
+<div class="contentpane">
+<br>Since its release, VFP has provided editors that make it easier to specify the value of a property in the Properties window. Some properties, such as BorderStyle, have a combobox of acceptable values you can choose from. Others have a button with an ellipsis that launches the appropriate dialog, such as the Color dialog for BackColor and ForeColor. For years, VFP developers have lobbied Microsoft for the ability to specify editors for our own custom properties. In VFP 9, they deliver.<p>You specify an editor for a property in the script attribute of the Member Data for the property. Member Data is something new in VFP 9; it's an XML string that defines various attributes about the members of an object, including what case a member should be displayed in and whether it appears on the Favorites tab of the Properties window. Member Data is stored in one of two places: a custom _MemberData property of the object, which can contain Member Data for multiple members of the object, or in records in the IntelliSense table (FoxCode.DBF), each of which contains the Member Data for a single member.<p>Rather than typing XML, which is tedious, VFP 9 includes the MemberData Editor, accessible from the Form and Class menus. To specify the editor for a property, select that property in the MemberData Editor, turn on the Has MemberData setting, and type the code to execute when the editor for that property is invoked in the Script editbox.<p>How does this relate to the New Property/Method replacement dialog? When you create a new property, if the property name begins with a lower-case L ("l"), that indicates the property contains logical values. In this case, the Use Toggle Editor control is enabled. Turning this option on automatically adds DO PropertyEditor WITH "PropertyName", "Toggle" to the script attribute of the Member Data for the property. However, you can use the framework for property editors provided with the New Property/Method replacement dialog to create your own custom property editors.<p>Before we look at how to create property editors, here are a few things you should know about them:<p><ul><li>You can invoke the editor for a property in one of two ways: click on the button with the ellipsis that appears when an editor is specified for a property or double-click the property row in the Properties window.<p><li>Property editors are hard to debug: if you put SET STEP ON into the code, execution is suspended at that point. However, even if you choose Step Into, execution continues without stopping. To prevent this, use SYS(2030, 1), which enables debugging in system components, just before the SET STEP ON.<p><li>If you want to use classes in earlier versions of VFP, you can't use _MemberData. Well, you can, but _MemberData must have less than 255 characters or you won't be able to open the class in earlier versions, and you'll find it's very easy to surpass that limit given the verbosity of XML. In that case, store Member Data in the IntelliSense table instead.<br></ul><p>The Property Editor framework was created by Doug Hennig.
+<br>
+
+<p>
+</div>
+<hr>
+<small>Last Updated: <i>12/30/2008</i></small>
+</body>
+</html>
