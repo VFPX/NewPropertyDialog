@@ -1,39 +1,0 @@
-
-<html>
-<head>
-<topictype value="TOPIC"/>
-<title>MENUHIT</title>
-<LINK rel="stylesheet" type="text/css" href="templates/wwhelp.css">
-<SCRIPT SRC="templates/wwhelp.js"></SCRIPT>
-</head>
-<body leftmargin=0 topmargin=0>
-
-<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
-<tr><td valign="center">
-<span class="projectname">New Property/Method Dialog Replacement</span>
-</td></tr><tr><td>
-<span class="topicname">MENUHIT
-</span>
-</td></tr>
-</table>
-
-<div class="contentpane">
-<br>To trap a system menu hit, create a script record in the IntelliSense table, with TYPE = "S" (for "script"), ABBREV = "MENUHIT," and the code to execute in the DATA memo field. (The IntelliSense table is pointed to by the _FOXCODE system variable; by default, it's FOXCODE.DBF in the HOME(7) directory.) The code should accept an object as a parameter. This object has several properties, but the important ones as far as MENUHIT is concerned are:<p><table align="Center" border="1" width="90%" cellpadding="5"><tr>     <th>Property</th>  <th>Description</th></tr><tr>  <td valign='top'>UserTyped</td>  <td valign='top'>The prompt of the pad the menu hit is from.</td></tr><tr>  <td valign='top'>MenuItem</td>  <td valign='top'>The prompt of the bar the user selected.</td></tr><tr>  <td valign='top'>ValueType</td>  <td valign='top'>A return value to VFP: blank means continue with the default behavior and "V" or "L" means prevent the default behavior (similar to using NODEFAULT in class code).</td></tr></table><p>Here's a simple example:<p><pre>text to lcCode noshow
-lparameters toParameter
-wait window 'Pad: ' + toParameter.UserTyped + chr(13) + ;
-  'Bar: ' + toParameter.MenuItem
-endtext
-delete from (_foxcode) where TYPE = 'S' and ;
-  ABBREV = 'MENUHIT'
-insert into (_foxcode) ;
-    (TYPE, ABBREV, DATA) ;
-  values ;
-    ('S', 'MENUHIT', lcCode)</pre><p>This simply displays the pad and bar prompts for the selected menu item and then carries on with the default behavior for that item. This is fine for testing code, but in "real" code, you may want to disable the default behavior and replace it with your own. In that case, set the ValueType property of the parameter object to "V" or "L" and have the code return .T. (In case you're wondering why there are two values, it's because these values are used for other purposes by the IntelliSense manager, and the VFP team decided to use the same mechanism for MENUHIT.)
-<br>
-
-<p>
-</div>
-<hr>
-<small>Last Updated: <i>12/30/2008</i></small>
-</body>
-</html>
